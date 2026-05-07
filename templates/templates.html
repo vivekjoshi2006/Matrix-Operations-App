@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixSolve | AI Matrix Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-12 px-4">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-2 italic">MATRIX<span class="text-indigo-500">SOLVE.</span></h1>
+            <p class="text-slate-400 font-medium">Professional Linear Algebra Operations Engine</p>
+        </header>
+
+        <form method="POST">
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <!-- Matrix A -->
+                <div class="glass-panel p-6">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-indigo-400 mb-4">Matrix A (Space separated values)</label>
+                    <textarea name="matrix_a" rows="6" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 font-mono text-indigo-300 focus:border-indigo-500 outline-none transition-all" placeholder="1 2&#10;3 4">{{ a_val }}</textarea>
+                </div>
+
+                <!-- Matrix B -->
+                <div class="glass-panel p-6">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-emerald-400 mb-4">Matrix B (For Add/Sub/Mul)</label>
+                    <textarea name="matrix_b" rows="6" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 font-mono text-emerald-300 focus:border-emerald-500 outline-none transition-all" placeholder="5 6&#10;7 8">{{ b_val }}</textarea>
+                </div>
+            </div>
+
+            <!-- Operations -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button name="action" value="add" class="btn-op bg-indigo-600 hover:bg-indigo-500">Add (A+B)</button>
+                <button name="action" value="subtract" class="btn-op bg-slate-700 hover:bg-slate-600">Subtract (A-B)</button>
+                <button name="action" value="multiply" class="btn-op bg-emerald-600 hover:bg-emerald-500">Multiply (A×B)</button>
+                <button name="action" value="transpose" class="btn-op border border-slate-600 hover:bg-slate-800">Transpose A</button>
+                <button name="action" value="determinant" class="btn-op border border-slate-600 hover:bg-slate-800">Det(A)</button>
+                <a href="/" class="px-6 py-3 rounded-full text-sm font-bold text-slate-500 hover:text-white transition-colors">Clear</a>
+            </div>
+        </form>
+
+        <!-- Result Section -->
+        {% if result or error %}
+        <div class="max-w-2xl mx-auto result-anim">
+            <div class="glass-panel p-8 border-t-4 {% if error %}border-red-500{% else %}border-indigo-500{% endif %}">
+                <h3 class="text-sm font-black uppercase tracking-widest mb-6 text-slate-500">Computation Output</h3>
+                
+                {% if error %}
+                    <div class="text-red-400 font-mono text-lg bg-red-500/10 p-4 rounded-lg border border-red-500/20">
+                        ⚠️ {{ error }}
+                    </div>
+                {% else %}
+                    <div class="font-mono text-2xl text-indigo-300 leading-relaxed">
+                        {% if result is string %}
+                            {{ result }}
+                        {% else %}
+                            <table class="mx-auto border-separate border-spacing-4">
+                                {% for row in result %}
+                                <tr>
+                                    {% for val in row %}
+                                    <td class="bg-slate-800/80 px-6 py-3 rounded-lg shadow-inner">{{ val }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
